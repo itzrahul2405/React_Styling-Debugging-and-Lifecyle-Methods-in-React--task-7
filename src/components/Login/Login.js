@@ -13,11 +13,43 @@ const Login = (props) => {
   const [collegeNameIsValid, setCollegeNameIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+// try this with array of dependencies and without array also
   useEffect(() => {
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6  && enteredCollegeName.trim().length > 10
-    );
+    console.log('EFFECT RUNNING');
+
+    return () => {
+      console.log('EFFECT CLEANUP')
+    }
+  }, []);
+
+
+  // useEffect(() => {
+  //   setFormIsValid(
+  //     enteredEmail.includes('@') && enteredPassword.trim().length > 6  && enteredCollegeName.trim().length > 10
+  //   );
+  // }, [enteredEmail, enteredPassword, enteredCollegeName]);
+
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log('checking form validity!');
+      setFormIsValid(
+        enteredEmail.includes('@') && enteredPassword.trim().length > 6  && enteredCollegeName.trim().length > 10
+      );
+    }, 500);
+
+    return () => {
+      console.log('CLEANUP');
+      clearTimeout(identifier);
+    }
+
   }, [enteredEmail, enteredPassword, enteredCollegeName]);
+
+//  basically sometimes we needs to have an effect that also have some cleanup work, for eg. in  above useEffect, setFormIsValid function triggers
+// another function component execution after every keystroke (everytime when enter key it will check this condition and process setFormIsValid()) that is cause of unnecessary requests.
+// so we used timer that checks only if the pauses long enough that is called debouncing and this cleanup function will cancel all timers except last one.
+
+// CHATGPT explaination => (Certainly! The first `useEffect` immediately checks form validity based on user input and runs whenever input changes, while the second `useEffect` employs a timer to debounce the form validity check and ensure it only occurs after a pause in input. The cleanup function in the second `useEffect` cancels any previous timers to prevent multiple checks, allowing only the latest timer to execute.)
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
