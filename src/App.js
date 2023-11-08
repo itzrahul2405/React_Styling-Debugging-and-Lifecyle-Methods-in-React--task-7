@@ -23,7 +23,7 @@ function App() {
   }, []);
   // this will not run after every component evaluation but it will run if  it's dependencies will change
 
-  const loginHandler = (email,collegename, password) => {
+  const loginHandler = (email, password) => {
     // We should of course check email, collegename and password
     // But it's just a dummy/ demo anyways
     localStorage.setItem('isLoggedIn', '1');
